@@ -3,22 +3,36 @@ import http from './http.js'
 import router from './router/index.js'
 import { Role } from './utils.js'
 
+const dealAuth = (commit, data) => {
+    const token = data.auth.accessToken 
+    const role = data.role
+
+    localStorage.setItem('token', token)
+    localStorage.setItem('role', role)
+    localStorage.setItem('user', JSON.stringify(data.user))
+
+    commit('setAuth', { token, role })
+    commit('setUser', data.user)
+
+    router.push(`/${role}/home`)
+}
+
 // Create a new store instance.
 const store = createStore({
   state () {
     return {
       token: localStorage.getItem('token'),
       role: localStorage.getItem('role'),
-      normal_teacher_school_id: localStorage.getItem('normal_teacher_school_id'),
+      user: JSON.parse(localStorage.getItem('user')),
       errors: {}
     }
   },
   getters: {
+    getUser(state) {
+      return state.user
+    },
     getErrors(state) {
       return state.errors
-    },
-    getNormalTeacherSchoolId(state) {
-      return state.normal_teacher_school_id
     },
     token(state) {
         return state.token
@@ -28,13 +42,15 @@ const store = createStore({
     },
     hasToken(state) {
         return Boolean (state.token)
-    }
+    },
   },
   mutations: {
-    setAuth (state, {token, role, normal_teacher_school_id}) {
+    setAuth (state, {token, role }) {
         state.token = token
         state.role = role
-        state.normal_teacher_school_id = normal_teacher_school_id
+    },
+    setUser(state, user) {
+      state.user = user
     },
     setErrors(state, errors) {
       state.errors = errors
@@ -43,34 +59,30 @@ const store = createStore({
   actions: {
       login({ commit }, form) {
         http.post('login', form).then(({data}) => {
-            const token = data.auth.access_token 
-            const role = data.role
-            const normal_teacher_school_id = data.normal_teacher_school_id
-            localStorage.setItem('token', token)
-            localStorage.setItem('role', role)
-            localStorage.setItem('normal_teacher_school_id', normal_teacher_school_id)
-            commit('setAuth', { token, role, normal_teacher_school_id })
-            router.push(`/${role}/home`)
+          dealAuth(commit, data)
         })
       },
       normalTeacherLogin({ commit }, form) {
         http.post('normal_teacher', form).then(({data}) => {
-            const token = data.auth.accessToken 
-            const role = Role.Normal
-            const normal_teacher_school_id = data.normal_teacher_school_id
-            localStorage.setItem('token', token)
-            localStorage.setItem('role', role)
-            localStorage.setItem('normal_teacher_school_id', normal_teacher_school_id)
-            debugger
-            commit('setAuth', { token, role, normal_teacher_school_id })
-            router.push(`/${role}/home`)
+          dealAuth(commit, data)
         })
+      },
+      lineBind({commit}, {official_id, form}) {
+        http.post('/line/' + official_id + '/users', form).then(({data}) => {
+          dealAuth(commit, data)
+        })
+      },
+      lineLogin({commit}, form) {
+          http.post('/line/login', form).then(({data}) => {
+            dealAuth(commit, data)
+          })
       },
       logout({ commit }) {
           localStorage.removeItem('token')
           localStorage.removeItem('role')
-          localStorage.removeItem('normal_teacher_school_id')
-          commit('setAuth', {token: null, role: null, normal_teacher_school_id: null})
+          localStorage.removeItem('user')
+          commit('setAuth', {token: null, role: null })
+          commit('setUser', null)
           router.push('/login')
       },
       setErrors({ commit }, errors) {

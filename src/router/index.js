@@ -1,17 +1,32 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import { middleware as allMiddleware } from "../utils.js"
+import { middleware as allMiddleware, Role } from "../utils.js"
 import notify from '../notify.js'
 import PrincipalLayout from "../pages/principal/layout.vue"
+import store from "../store.js";
 
 const routes = [
   {
     path: "/",
     name: "Home",
-    component: () => import("../pages/home.vue"),
+    redirect: to => {
+      if (store.getters.role === Role.Principal) {
+        return '/principal/home'
+      }
+      if (store.getters.role === Role.Normal) {
+        return '/normal/home'
+      }
+      if (store.getters.role === Role.Student) {
+        return '/student/home'
+      }
+      return '/login'
+    },
   },
   {
     path: '/principal',
     component: () =>  import("../pages/principal/layout.vue"),
+    meta: {
+      middleware: 'principal'
+    },
     children: [
       {
         path: 'home',
@@ -26,6 +41,9 @@ const routes = [
   {
     path: '/normal',
     component: () =>  import("../pages/normal/layout.vue"),
+    meta: {
+      middleware: 'normal'
+    },
     children: [
       {
         path: 'home',
@@ -36,6 +54,9 @@ const routes = [
   {
     path: '/student',
     component: () =>  import("../pages/student/layout.vue"),
+    meta: {
+      middleware: 'student'
+    },
     children: [
       {
         path: 'home',
@@ -54,6 +75,13 @@ const routes = [
   {
     path: "/register",
     component: () => import("../pages/register.vue"),
+    meta: {
+      middleware: 'guest'
+    }
+  },
+  {
+    path: "/line/login",
+    component: () => import("../pages/lineLogin.vue"),
     meta: {
       middleware: 'guest'
     }
@@ -79,7 +107,7 @@ router.beforeEach((to, from) => {
     for(let middleware of routerMiddleware) {
       if (!allMiddleware[middleware]()) {
         notify('auth middleware not allowed');
-        return false;
+        return from;
       }
     }
   }

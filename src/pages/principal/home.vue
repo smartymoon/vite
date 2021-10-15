@@ -1,7 +1,7 @@
 <template>
 <div class="grid grid-cols-5 gap-4">
     <div class="col-span-3">
-        <school-list v-if="schools.length > 0" :schools="schools" @change="handleSchoolChange" />
+        <school-list class="mb-4" v-if="schools.length > 0" :schools="schools" @change="handleSchoolChange" />
         <people-list  :people="people" />
     </div>
     <div class="col-span-2">

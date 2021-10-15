@@ -69,6 +69,7 @@ http.interceptors.response.use(function (response) {
             */
         } else if (error.response.status === 403) {
             Message('sorry, you don not have auth');
+            store.dispatch('logout');
         } else if (error.response.status === 401) {
             Message('not login or login expired');
             store.dispatch('logout');

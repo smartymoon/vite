@@ -21,7 +21,7 @@ export default {
     setup() {
         const people = ref([])
         const store = useStore()
-        const school_id = store.getters.getNormalTeacherSchoolId
+        const school_id = store.state.user.school_id
         onMounted(() => {
             http.get(`/schools/${school_id}/students`).then(students => {
                 people.value = students

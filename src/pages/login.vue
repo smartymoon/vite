@@ -61,9 +61,9 @@
                 <div class="relative flex justify-center text-sm my-2">
                     <span class="px-2 bg-white text-gray-500"> Or </span>
                 </div>
-                <button  class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <a href="http://edu.test/api/line/login"  target="_black" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                   Sign in with Line
-                </button>
+                </a>
               </div>
             </form>
           </div>
@@ -86,8 +86,8 @@ export default {
         const store = useStore()
         console.log(store)
         const form = reactive({
-            // email: 'susan@edu.com',
-            email: 'student@student.com',
+            email: 'susan@edu.com',
+            //email: 'student@student.com',
             password: '123456',
         })
         return {
