@@ -28,6 +28,7 @@ http.interceptors.request.use(function (config) {
     store.dispatch('clearErrors')
     if (store.state.token) {
         config.headers.Authorization = 'Bearer ' + store.state.token;
+        config.headers.Role = store.state.role;
     }
     return config;
 }, function (error) {

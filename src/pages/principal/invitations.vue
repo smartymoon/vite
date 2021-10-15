@@ -43,7 +43,7 @@
                     Normal Teacher
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <span v-if="people.if_register" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                  <span v-if="person.if_register" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                     Active
                   </span>
                   <span v-else class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-pink-100 text-pink-800">

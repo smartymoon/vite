@@ -19,14 +19,14 @@
       </svg>
       <div class="text-center">
         <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-            Welcome to XXX School
+            Welcome to {{ school }}
         </h2>
         <p class="mt-4 text-lg leading-6 text-gray-500">
           I am principal of {{ school }}, welcome to our school
         </p>
       </div>
       <div class="mt-12">
-        <form action="#" method="POST" class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
+        <form @submit.prevent class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
           <div class="sm:col-span-2">
             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
             <div class="mt-1">
@@ -37,24 +37,35 @@
             <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
             <div class="mt-1">
               <input type="text" name="name" id="company" autocomplete="organization" 
-              placeholder="please input your real name"
-              class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md" />
+                v-model="form.name"  
+                placeholder="please input your real name"
+                class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md" />
             </div>
+            <template v-if="errors['name']">
+                <p v-for="(error, k) in errors.name" :key="k" class="mt-2 text-sm text-red-600" id="email-error">
+                    {{ error }}
+                </p>
+            </template>
           </div>
           <div class="sm:col-span-2">
             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
             <div class="mt-1">
-              <input id="password" name="password" type="password"  class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md" />
+              <input id="password" v-model="form.password" name="password" type="password"  class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md" />
             </div>
+            <template v-if="errors['password']">
+                <p v-for="(error, k) in errors.password" :key="k" class="mt-2 text-sm text-red-600" id="email-error">
+                    {{ error }}
+                </p>
+            </template>
           </div>
           <div class="sm:col-span-2">
             <label for="email" class="block text-sm font-medium text-gray-700">Password Confirmation</label>
             <div class="mt-1">
-              <input id="password_confirmation" name="password_confirmation" type="password"  class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md" />
+              <input id="password_confirmation" v-model="form.password_confirmation" name="password_confirmation" type="password"  class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md" />
             </div>
           </div>
           <div class="sm:col-span-2">
-            <button type="submit" class="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <button @click="handleSubmit" class="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 Join Us
             </button>
           </div>
@@ -65,8 +76,9 @@
 </template>
 
 <script>
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, toRaw, computed } from 'vue'
 import http from '../../http'
+import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 
 export default {
@@ -74,6 +86,12 @@ export default {
     const slug = useRoute().query.slug
     const school = ref('')
     const email = ref('')
+    const store = useStore()
+
+    const errors = computed(() => {
+        return store.getters.getErrors || []
+    })
+
     const form = reactive({
         slug,  
         name: '',
@@ -89,7 +107,11 @@ export default {
     return {
         school,
         email,
-        form
+        form,
+        errors,
+        handleSubmit() {
+            store.dispatch('normalTeacherLogin', toRaw(form))
+        }
     }
   },
 }
