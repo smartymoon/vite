@@ -2,7 +2,7 @@
 <div class="grid grid-cols-5 gap-4">
     <div class="col-span-3">
         <school-list v-if="schools.length > 0" :schools="schools" @change="handleSchoolChange" />
-        <student-list  :people="people" />
+        <people-list  :people="people" />
     </div>
     <div class="col-span-2">
         <school-form  class="mb-6" @created="handleSchoolCreated" />
@@ -17,7 +17,7 @@ import SchoolForm from './components/SchoolForm.vue'
 import StudentForm from './components/StudentForm.vue'
 import InviteForm from './components/InviteForm.vue'
 import SchoolList from './components/SchoolList.vue'
-import StudentList from '../../components/StudentList.vue'
+import PeopleList from '../../components/PeopleList.vue'
 import http from '../../http'
 import { ref, onMounted } from 'vue'
 export default {
@@ -26,7 +26,7 @@ export default {
         SchoolForm,
         StudentForm,
         SchoolList,
-        StudentList
+        PeopleList
     },
     setup() {
         const people = ref([])

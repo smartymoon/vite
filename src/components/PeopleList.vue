@@ -43,7 +43,7 @@ export default {
     people: {
       type: Array,
       required: true
-    }
+    },
   },
   components: {
     Follow

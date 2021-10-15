@@ -34,6 +34,16 @@ const routes = [
     ]
   },
   {
+    path: '/student',
+    component: () =>  import("../pages/student/layout.vue"),
+    children: [
+      {
+        path: 'home',
+        component: ()  => import("../pages/student/home.vue")
+      }
+    ]
+  },
+  {
     name: 'login',
     path: "/login",
     component: () => import("../pages/login.vue"),

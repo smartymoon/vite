@@ -8,8 +8,7 @@ const store = createStore({
   state () {
     return {
       token: localStorage.getItem('token'),
-      // role: localStorage.getItem('role'),
-      role: 'normal',
+      role: localStorage.getItem('role'),
       normal_teacher_school_id: localStorage.getItem('normal_teacher_school_id'),
       errors: {}
     }
