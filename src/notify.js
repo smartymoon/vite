@@ -1,12 +1,20 @@
+import { notify } from "notiwind"
 
-import { notify } from "@kyvg/vue3-notification";
+export default {
+    fail(title, text = '') {
+        notify({
+            group: "fail",
+            title,
+            text
+        }, 4000)
+    },
+    success(title, text = '') {
+        notify({
+            group: "success",
+            title,
+            text,
+        }, 4000)
 
-export default  (title, content = '') => {
-    /*
-    notify({
-        title,
-        content
-    })
-    */
-   alert(title)
+    },
 }
+

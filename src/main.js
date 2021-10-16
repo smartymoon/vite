@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import router from "./router/index.js";
 import store from './store.js'
-import Notifications from '@kyvg/vue3-notification'
+import Notifications from 'notiwind'
 
 import './index.css'
 

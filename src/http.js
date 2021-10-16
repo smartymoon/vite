@@ -41,10 +41,10 @@ http.interceptors.response.use(function (response) {
     // Do something with response data
     // store.commit('endLoading');
     if (response.data.code && response.data.code === httpCode.success_code) {
-        Message(response.data.message);
+        Message.success(response.data.message);
     }
     if (response.data.code && response.data.code === httpCode.fail_code) {
-        Message(response.data.message);
+        Message.fail(response.data.message);
         return Promise.reject(response);
     }
     return response.data;
@@ -68,21 +68,21 @@ http.interceptors.response.use(function (response) {
             });
             */
         } else if (error.response.status === 403) {
-            Message('sorry, you don not have auth');
+            Message.fail('sorry, you don not have auth');
             store.dispatch('logout');
         } else if (error.response.status === 401) {
-            Message('not login or login expired');
+            Message.fail('not login or login expired');
             store.dispatch('logout');
         } else if (error.response.status === 429) {
-            Message('action too frequently');
+            Message.fail('action too frequently');
         } else if (error.response.status === 404) {
-            Message('api not found');
+            Message.fail('api not found');
         } else if (error.response.status === 500) {
-            Message('inner error');
+            Message.fail('inner error');
         } else if (error.response.status === 405) {
-            Message('method not allowed');
+            Message.fail('method not allowed');
         } else {
-            Message('error happened');
+            Message.fail('error happened');
         }
         console.log(error.response.data);
         console.log(error.response.status);
@@ -91,11 +91,11 @@ http.interceptors.response.use(function (response) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        Message('response nothing');
+        Message.fail('response nothing');
         console.log(error.request);
     } else {
         // Something happened in setting up the request that triggered an Error
-        Message('request fail');
+        Message.fail('request fail');
         console.log('Error', error.message);
     }
     console.log(error.config);

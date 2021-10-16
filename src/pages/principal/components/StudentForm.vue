@@ -1,6 +1,6 @@
 
 <template>
-  <div class="border rounded bg-gray-50 p-4">
+  <form @submit.prevent class="border rounded bg-gray-50 p-4">
     <h2 class="mb-4">Add Student</h2>
     <div class="mb-4">
       <label for="name" class="block text-sm font-medium text-gray-700">School (Pick a school on left side)</label>
@@ -11,11 +11,11 @@
     <lee-input label="Password" placeholder="Input password" name="password" v-model="form.password" type="password" />
     <lee-input label="Password Confrim" placeholder="input password again" name="password_confirmation" v-model="form.password_confirmation"  type="password" />
     <div class="flex justify-end">
-      <button @click="handleSubmit" type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+      <button @click="handleSubmit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
           Add
       </button>
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
@@ -53,6 +53,5 @@ export default {
             }
         }
     }
-
 }
 </script>
