@@ -59,6 +59,7 @@ export default {
         const talks = ref([]);
         const current_message = ref('')
         const getMessageHistory = () => {
+            if (!props.another.id) return
             http.get('/messages/' + props.me.role + '/' + props.another.id).then(data => {
                 talks.value = data.map((item) => {
                     return {

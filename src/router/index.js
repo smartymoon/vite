@@ -1,8 +1,8 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import { middleware as allMiddleware, Role } from "../utils.js"
-import notify from '../notify.js'
 import PrincipalLayout from "../pages/principal/layout.vue"
 import store from "../store.js";
+import Message from '../notify.js'
 
 const routes = [
   {
@@ -47,7 +47,11 @@ const routes = [
     children: [
       {
         path: 'home',
-        component: ()  => import("../pages/normal/home.vue")
+        component: ()  => import("../pages/normal/home.vue"),
+        props: route => ({
+          chat_user_id: route.query.chat_user_id,
+          chat_user_name: route.query.chat_user_name,
+        })
       }
     ]
   },
@@ -110,7 +114,7 @@ router.beforeEach((to, from) => {
     }
     for(let middleware of routerMiddleware) {
       if (!allMiddleware[middleware]()) {
-        notify('auth middleware not allowed');
+        Message.fail('auth middleware not allowed');
         return from;
       }
     }
