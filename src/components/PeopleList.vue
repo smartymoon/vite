@@ -5,8 +5,11 @@
       <ul role="list" class="-my-5 divide-y divide-gray-200">
         <li v-for="person in people"  class="py-4">
           <div class="flex items-center space-x-4">
-            <div class="flex-shrink-0">
+            <div class="flex-shrink-0 relative">
               <img class="h-8 w-8 rounded-full" :src="avatars[Math.floor(Math.random() * 4)]" alt="" />
+              <div class="absolute right-0 bottom-0" v-if="person.unread">
+                <div class="rounded-full h-3 w-3 bg-red-400"></div>
+              </div>
             </div>
             <div class="flex-1 min-w-0">
               <p class="text-sm font-medium text-gray-900 truncate">
@@ -15,10 +18,10 @@
               <p class="text-xs text-gray-500">{{ person.email }}</p>
             </div>
             <div class="flex gap-1">
-              <Follow :canEdit="canEdit" :person="person" />
-              <a href="#" class="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50">
-                Chat
+              <a @click="handleClick(person)" :class="person.unread ? 'text-red-400 border-red-300' : ''" class="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50">
+                {{ person.unread ? 'UnRead' : 'Chat' }}
               </a>
+              <Follow :canEdit="canEdit" :person="person" />
             </div>
           </div>
         </li>
@@ -48,13 +51,14 @@ export default {
   components: {
     Follow
   },
-  setup() {
+  setup(props, {emit}) {
     const store = useStore()
     return {
         avatars,
         canEdit:  store.getters.role === Role.Student,
-        following (person) {
-
+        handleClick(person) {
+          emit('chat', person.id, person.name)
+          person.unread = false
         }
     }
   },

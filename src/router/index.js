@@ -35,7 +35,7 @@ const routes = [
       {
         path: 'invitations',
         component: ()  => import("../pages/principal/invitations.vue")
-      },
+      }
     ]
   },
   {
@@ -60,7 +60,11 @@ const routes = [
     children: [
       {
         path: 'home',
-        component: ()  => import("../pages/student/home.vue")
+        component: ()  => import("../pages/student/home.vue"),
+        props: route => ({
+          chat_user_id: route.query.chat_user_id,
+          chat_user_name: route.query.chat_user_name,
+        })
       }
     ]
   },

@@ -41,7 +41,9 @@ http.interceptors.response.use(function (response) {
     // Do something with response data
     // store.commit('endLoading');
     if (response.data.code && response.data.code === httpCode.success_code) {
-        Message.success(response.data.message);
+        if (response.data.message) {
+            Message.success(response.data.message);
+        }
     }
     if (response.data.code && response.data.code === httpCode.fail_code) {
         Message.fail(response.data.message);
