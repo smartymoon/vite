@@ -1,19 +1,19 @@
 import { notify } from "notiwind"
 
 export default {
-    fail(title, text = '') {
+    fail(title, text = '', time = 4000) {
         notify({
-            group: "fail",
+            group: "error",
             title,
             text
-        }, 4000)
+        }, time)
     },
-    success(title, text = '') {
+    success(title, text = '', time = 4000) {
         notify({
             group: "success",
             title,
             text,
-        }, 4000)
+        }, time)
 
     },
 }

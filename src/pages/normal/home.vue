@@ -13,7 +13,7 @@
 import PeopleList from '../../components/PeopleList.vue'
 import Chat from '../../components/Chat.vue'
 import http from '../../http'
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRouter } from 'vue-router' 
 import { useStore  } from 'vuex'
 export default {
@@ -33,26 +33,22 @@ export default {
     },
     setup(props) {
         const store = useStore()
-        const people = ref([])
-        const school_id = store.state.user.school_id
         const another_id = ref(props.chat_user_id || null)
         const chat_name = ref(props.chat_user_name || '')
         const router = useRouter()
+
+        store.dispatch('getStudentsOfSchool')
+        store.commit('talkingTo', +props.chat_user_id)
         watch(() => props.chat_user_id, (id) => {
             another_id.value = +id
         })
         watch(() => props.chat_user_name, (name) => {
             chat_name.value = name
         })
-        onMounted(() => {
-            http.get(`/schools/${school_id}/students`).then(students => {
-                people.value = students
-            })
-        })
         return {
             another_id,
             chat_name,
-            people,
+            people: computed(() => store.state.people),
             handleChat(user_id, user_name) {
                 router.replace({ path: '/normal/home', query: {
                     chat_user_id: user_id,

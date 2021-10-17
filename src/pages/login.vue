@@ -86,9 +86,9 @@ export default {
         const store = useStore()
         console.log(store)
         const form = reactive({
-            email: 'normal@teacher.com',
-            // email: 'susan@edu.com',
-            // email: 'student@student.com',
+            //email: 'normal@teacher.com',
+            email: 'susan@edu.com',
+            //email: 'student@student.com',
             password: '123456',
         })
         return {

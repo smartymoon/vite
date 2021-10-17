@@ -1,7 +1,7 @@
 <template>
-<div class="border p-3 rounded" v-if="talkTo">
+<div class="border p-3 rounded flex flex-col h-full" v-if="talkTo" >
     <h2 class="text-lg border-b pb-2">Chat with {{ talkTo }}</h2>
-    <div class="overflow-y-scroll p-3 mt-3 flex flex-col-reverse" style="height: 600px">
+    <div class="overflow-y-scroll p-3 mt-3 flex flex-col-reverse h-full flex-auto" style="height: 600px; ">
         <div v-if="talks.length > 0">
             <div v-for="message in talks" :key="message.id" :class="['flex my-3 items-top space-x-2', message.mine ? 'flex-row-reverse space-x-reverse' : 'justify-start']" >
                 <img class="h-8 w-8 rounded-full" :src="message.mine ? avatars[0] : avatars[1]" alt="" />
@@ -21,7 +21,7 @@
     <div class="relative flex items-center mt-3">
       <input v-on:keyup.enter="handleSent" autofocus v-model="current_message" placeholder="write message here" type="text" name="search" id="search" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-12 sm:text-sm border-gray-300 rounded-md" />
       <div @click="handleSent" class="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 cursor-pointer">
-        <kbd class="inline-flex items-center border border-gray-200 rounded px-2 text-sm font-sans font-medium text-gray-400">
+        <kbd class="inline-flex items-center border border-gray-200 rounded px-2 text-sm font-sans font-medium text-gray-400 bg-gray-200">
            Sent
         </kbd>
       </div>
@@ -33,9 +33,10 @@
 </template>
 
 <script>
-import { onMounted, ref } from '@vue/runtime-core'
+import { computed, onMounted, onUnmounted, ref } from '@vue/runtime-core'
 import { watch } from '@vue/runtime-core'
 import http from '../http'
+import {useStore} from 'vuex'
 const avatars = [
     'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
     'https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
@@ -56,10 +57,28 @@ export default {
         },
     },
     setup(props) {
+        const store = useStore()
         const talks = ref([]);
         const current_message = ref('')
+        let last_message = {}
+        watch(() => store.getters.newMessage, ({message}) => {
+            if (!message) return
+            last_message = message
+            if (message.from_id === +props.another.id) {
+                talks.value.push({
+                    id: message.id,
+                    message: message.message,
+                    mine: false,
+                    created_at: message.created_at
+                })
+                http.put('/message/' + props.me.role + '/' +  message.id + '/read').then(() => {
+                    console.log('message ' + message.id + ' seen')
+                })
+            }
+        })
         const getMessageHistory = () => {
             if (!props.another.id) return
+            store.commit('talkingTo', props.another.id)
             http.get('/messages/' + props.me.role + '/' + props.another.id).then(data => {
                 talks.value = data.map((item) => {
                     return {
@@ -68,7 +87,7 @@ export default {
                         mine: item.from_id === props.me.id && item.from_type === props.me.role,
                         created_at: item.created_at
                     }            
-                }).reverse()
+                })
             })
         }
         onMounted(() => {
@@ -87,13 +106,13 @@ export default {
                     toId: props.another.id,
                     message: current_message.value
                 }).then(({data}) => {
+                    current_message.value = ''
                     talks.value.push({
                         id: data.id,
                         message: data.message,
                         mine: true,
                         created_at: data.created_at
                     })
-                    current_message.value = ''
                 })
 
             }

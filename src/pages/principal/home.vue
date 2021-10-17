@@ -67,7 +67,7 @@ import InviteForm from './components/InviteForm.vue'
 import SchoolList from './components/SchoolList.vue'
 import PeopleList from '../../components/PeopleList.vue'
 import http from '../../http'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import Chat from '../../components/Chat.vue'
 import {
     Dialog,
@@ -76,6 +76,7 @@ import {
     TransitionRoot,
     TransitionChild,
 } from "@headlessui/vue";
+import store from '../../store'
 export default {
     components: {
         InviteForm,
@@ -91,7 +92,6 @@ export default {
         Chat,
     },
     setup() {
-        const people = ref([])
         const schools = ref([])
         const current_school = ref(null)
         const isOpen = ref(false);
@@ -102,16 +102,14 @@ export default {
                 schools.value = data
                 if (data.length > 0) {
                     current_school.value = data[0]
-                    http.get(`/schools/${data[0].id}/students`).then(students => {
-                        people.value = students
-                    })
+                    store.dispatch('getStudentsOfSchool', data[0].id)
                 }
                 
             })
         })
         return {
-            people,
             schools,
+            people: computed(() => store.state.people),
             current_school,
             isOpen,
             talk_to_id,
@@ -124,9 +122,7 @@ export default {
             },
             handleSchoolChange(school) {
                 current_school.value = school
-                http.get(`/schools/${school.id}/students`).then(students => {
-                    people.value = students
-                })
+                store.dispatch('getStudentsOfSchool', school.id)
             },
             handleSchoolCreated(school) {
                 schools.value.push(school)

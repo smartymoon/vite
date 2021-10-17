@@ -5,4 +5,7 @@
 
 <script setup>
 import Notification from './components/Notification.vue';
+import Pusher from "pusher-js"
+
+
 </script>

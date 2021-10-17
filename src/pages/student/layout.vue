@@ -88,6 +88,7 @@
     <div class="py-10">
       <main>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <h1 class="text-xl font-bold">Student</h1>
           <!-- Replace with your content -->
           <div class="px-4 py-8 sm:px-0">
             <div class="border-4 border-dashed border-gray-200 rounded-lg p-5" >
@@ -106,6 +107,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/vue/outline'
 import { useStore } from 'vuex'
 import Notification from '../../components/Notification.vue'
+import { registerEcho } from '../../utils'
 
 
 const user = {
@@ -133,6 +135,8 @@ export default {
   },
   setup() {
     const store = useStore()
+
+    registerEcho()
     return {
       user,
       email: store.state.user.email,

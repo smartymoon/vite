@@ -1,9 +1,9 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-  <div class="p-4 border rounded">
+  <div class="pb-4 border rounded">
     <div class="flow-root mt-6">
       <ul role="list" class="-my-5 divide-y divide-gray-200">
-        <li v-for="person in people"  class="py-4">
+        <li v-for="person in people"  class="py-4 px-2 mx-2" :class="$store.state.talkingWith === person.id ? 'bg-blue-100 rounded overflow-hidden' : ''">
           <div class="flex items-center space-x-4">
             <div class="flex-shrink-0 relative">
               <img class="h-8 w-8 rounded-full" :src="avatars[Math.floor(Math.random() * 4)]" alt="" />
@@ -18,8 +18,8 @@
               <p class="text-xs text-gray-500">{{ person.email }}</p>
             </div>
             <div class="flex gap-1">
-              <a @click="handleClick(person)" :class="person.unread ? 'text-red-400 border-red-300' : ''" class="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50">
-                {{ person.unread ? 'UnRead' : 'Chat' }}
+              <a @click="handleClick(person)" :class="(person.unread) ? 'text-red-400 border-red-300' : ''" class="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50">
+                {{ (person.unread ) ? 'UnRead' : 'Chat' }}
               </a>
               <Follow :canEdit="canEdit" :person="person" />
             </div>

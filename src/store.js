@@ -1,11 +1,15 @@
 import { createStore } from 'vuex'
 import http from './http.js'
+import notify from './notify.js'
 import router from './router/index.js'
 import { Role } from './utils.js'
 
 const dealAuth = (commit, data) => {
     const token = data.auth.accessToken 
     const role = data.role
+
+    const identity = role === Role.Student ? 'student' : 'teacher'
+
 
     localStorage.setItem('token', token)
     localStorage.setItem('role', role)
@@ -24,7 +28,13 @@ const store = createStore({
       token: localStorage.getItem('token'),
       role: localStorage.getItem('role'),
       user: JSON.parse(localStorage.getItem('user')),
-      errors: {}
+      people: [],
+      errors: {},
+      newMessage: {
+        message: null,
+        fromName: ''
+      },
+      talkingWith: null,
     }
   },
   getters: {
@@ -43,6 +53,9 @@ const store = createStore({
     hasToken(state) {
         return Boolean (state.token)
     },
+    newMessage(state) {
+      return state.newMessage
+    }
   },
   mutations: {
     setAuth (state, {token, role }) {
@@ -54,6 +67,27 @@ const store = createStore({
     },
     setErrors(state, errors) {
       state.errors = errors
+    },
+    setNewMessage(state, message) {
+      state.newMessage = message
+    },
+    clearNewMessage(state, last_message_id)
+    {
+      if (state.newMessage.message && last_message_id === state.newMessage.message.id) {
+        state.newMessage = {
+          message: null,
+          fromName: ''
+        }
+      }
+    },
+    talkingTo(state, user_id) {
+      state.talkingWith = +user_id
+    },
+    leaveTalk(state) {
+      state.talkingWith = null
+    },
+    setPeople(state, people) {
+      state.people = people
     }
   },
   actions: {
@@ -90,6 +124,25 @@ const store = createStore({
       },
       clearErrors({ commit }) {
         commit('setErrors', {})
+      },
+      messageReceived({commit, state}, data) {
+        if (data.message.from_id !== state.talkingWith) {
+          // find person set him unread
+          state.people.find(person => person.id === +data.message.from_id).unread = true
+          notify.success('new message from ' + data.fromName, data.message.message, 10000)
+        }
+        commit('setNewMessage', data)
+      },
+      getStudentsOfSchool({commit, state}, id = null) {
+          let school_id = id || state.user.school_id;
+          http.get(`/schools/${school_id}/students`).then(students => {
+            commit('setPeople', students)
+          })
+      },
+      getTeachersOfSchool({commit, state}) {
+          http.get(`/students/teachers`).then(teachers => {
+            commit('setPeople', teachers)
+          })
       }
   }
 })
