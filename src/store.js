@@ -35,6 +35,7 @@ const store = createStore({
         fromName: ''
       },
       talkingWith: null,
+      unreadAdmin: 0
     }
   },
   getters: {
@@ -88,6 +89,9 @@ const store = createStore({
     },
     setPeople(state, people) {
       state.people = people
+    },
+    setUnreadAdmin(state, count) {
+      state.unreadAdmin = count
     }
   },
   actions: {
@@ -142,6 +146,12 @@ const store = createStore({
       getTeachersOfSchool({commit, state}) {
           http.get(`/students/teachers`).then(teachers => {
             commit('setPeople', teachers)
+          })
+      },
+      checkAdminMessages({commit, state}) {
+          const type = state.role === 'student' ? 'student' : 'teacher'
+          http.get(`/${type}/admin-messages/check`).then(({ data }) => {
+            commit('setUnreadAdmin', data)
           })
       }
   }

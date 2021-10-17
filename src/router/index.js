@@ -23,7 +23,7 @@ const routes = [
   },
   {
     path: '/principal',
-    component: () =>  import("../pages/principal/layout.vue"),
+    component: () =>  import("../pages/layout.vue"),
     meta: {
       middleware: 'principal'
     },
@@ -35,12 +35,16 @@ const routes = [
       {
         path: 'invitations',
         component: ()  => import("../pages/principal/invitations.vue")
+      },
+      {
+        path: 'admin-message',
+        component: ()  => import("../pages/admin/message.vue")
       }
     ]
   },
   {
     path: '/normal',
-    component: () =>  import("../pages/normal/layout.vue"),
+    component: () =>  import("../pages/layout.vue"),
     meta: {
       middleware: 'normal'
     },
@@ -57,7 +61,7 @@ const routes = [
   },
   {
     path: '/student',
-    component: () =>  import("../pages/student/layout.vue"),
+    component: () =>  import("../pages/layout.vue"),
     meta: {
       middleware: 'student'
     },
@@ -69,6 +73,10 @@ const routes = [
           chat_user_id: route.query.chat_user_id,
           chat_user_name: route.query.chat_user_name,
         })
+      },
+      {
+        path: 'admin-message',
+        component: ()  => import("../pages/admin/message.vue")
       }
     ]
   },
