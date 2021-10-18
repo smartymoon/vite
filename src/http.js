@@ -11,7 +11,7 @@ const httpCode = {
 
 
 const http = axios.create({
-    baseURL: 'http://edu.test/api',
+    baseURL: import.meta.env.VITE_API_URL +  '/api',
     timeout: 50000,
     headers: {
         'X-Requested-With': 'XMLHttpRequest',

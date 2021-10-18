@@ -61,7 +61,7 @@
                 <div class="relative flex justify-center text-sm my-2">
                     <span class="px-2 bg-white text-gray-500"> Or </span>
                 </div>
-                <a href="http://edu.test/api/line/login"  target="_black" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <a :href="api_url + '/api/line/login'"  target="_black" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                   Sign in with Line
                 </a>
               </div>
@@ -83,6 +83,7 @@ import notify from '../notify.js'
 
 export default {
     setup() {
+        const api_url = import.meta.env.VITE_API_URL
         const store = useStore()
         console.log(store)
         const form = reactive({
@@ -92,6 +93,7 @@ export default {
             password: '123456',
         })
         return {
+            api_url,
             form,
             handleLogin() {
                 store.dispatch('login', form)

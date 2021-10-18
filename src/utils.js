@@ -29,7 +29,7 @@ export function registerEcho() {
         broadcaster: 'pusher',
         key: '46d8134de723d77a6256',
         disableStats: true,
-        authEndpoint: `http://edu.test/api/broadcast/auth/${identity}`,
+        authEndpoint: import.meta.env.VITE_API_URL + `/api/broadcast/auth/${identity}`,
         auth: {
           headers: {
             Authorization: "Bearer " + store.getters.token,
