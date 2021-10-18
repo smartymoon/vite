@@ -2,7 +2,10 @@
 <div class="grid grid-cols-5 gap-4">
     <div class="col-span-3">
         <school-list class="mb-4" v-if="schools.length > 0" :schools="schools" @change="handleSchoolChange" />
-        <people-list @chat="handleChat" :people="people" />
+        <div v-else>
+            You don't have a school, create one first
+        </div>
+        <people-list @chat="handleChat" :people="people" v-if="schools.length > 0" />
     </div>
     <div class="col-span-2">
         <school-form  class="mb-6" @created="handleSchoolCreated" />
@@ -100,7 +103,7 @@ export default {
         onMounted(() => {
             http.get('schools').then(data => {
                 schools.value = data
-                if (data.length > 0) {
+                if (data.length > 0 && data[0].if_approve) {
                     current_school.value = data[0]
                     store.dispatch('getStudentsOfSchool', data[0].id)
                 }
@@ -126,10 +129,9 @@ export default {
             },
             handleSchoolCreated(school) {
                 schools.value.push(school)
-                current_school.value = school
             },
             handleStudentCreated(student) {
-                people.value.unshift(student)
+                store.commit('pushStudent', student)
             },
             handleChat(user_id, user_name) {
                 talk_to_id.value = user_id 

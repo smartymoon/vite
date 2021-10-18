@@ -1,6 +1,6 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-  <div class="pb-4 border rounded">
+  <div class="pb-4 border rounded" v-if="people.length > 0">
     <div class="flow-root mt-6">
       <ul role="list" class="-my-5 divide-y divide-gray-200">
         <li v-for="person in people"  class="py-4 px-2 mx-2" :class="$store.state.talkingWith === person.id ? 'bg-blue-100 rounded overflow-hidden' : ''">
@@ -27,6 +27,9 @@
         </li>
       </ul>
     </div>
+  </div>
+  <div v-else class="my-8">
+       no people or now, {{ $store.state.role === 'principal' ? 'you can add student after school appreoved' : '' }} 
   </div>
 </template>
 

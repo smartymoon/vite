@@ -92,7 +92,7 @@
     <div class="py-10">
       <main>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <h1 class="text-xl font-bold">Student</h1>
+          <h1 class="text-xl font-bold capitalize">{{ role }}</h1>
           <!-- Replace with your content -->
           <div class="px-4 py-8 sm:px-0">
             <div class="border-4 border-dashed border-gray-200 rounded-lg p-5" >
@@ -177,6 +177,7 @@ export default {
 
     return {
       user,
+      role,
       unreadAdmin: computed(() => store.state.unreadAdmin),
       email: store.state.user.email,
       navigation,

@@ -56,6 +56,10 @@ const routes = [
           chat_user_id: route.query.chat_user_id,
           chat_user_name: route.query.chat_user_name,
         })
+      },
+      {
+        path: 'admin-message',
+        component: ()  => import("../pages/admin/message.vue")
       }
     ]
   },

@@ -1,6 +1,6 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col" v-if="people.lenght > 0">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -52,7 +52,7 @@
 
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <router-link :to="'/invitation?slug=' + person.slug" target="_blank" class="text-indigo-600 hover:text-indigo-900">Url</router-link>
+                    <router-link v-if="!person.if_register" :to="'/invitation?slug=' + person.slug" target="_blank" class="text-indigo-600 hover:text-indigo-900">Url</router-link>
                 </td>
               </tr>
             </tbody>
@@ -60,6 +60,9 @@
         </div>
       </div>
     </div>
+  </div>
+  <div v-else class="py-8 text-center text-gray-800">
+      you have not invite any normal teacher
   </div>
 </template>
 

@@ -90,6 +90,9 @@ const store = createStore({
     setPeople(state, people) {
       state.people = people
     },
+    pushStudent(state, student) {
+      state.people.unshift(student)
+    },
     setUnreadAdmin(state, count) {
       state.unreadAdmin = count
     }
@@ -153,7 +156,13 @@ const store = createStore({
           http.get(`/${type}/admin-messages/check`).then(({ data }) => {
             commit('setUnreadAdmin', data)
           })
-      }
+      },
+      register({commit}, form) {
+          http.post('/register', form)
+              .then(({data}) => {
+                dealAuth(commit, data)
+              })
+      } 
   }
 })
 

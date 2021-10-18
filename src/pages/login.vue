@@ -48,9 +48,9 @@
 
               <div class="flex flex-row-reverse items-center justify-between">
                 <div class="text-sm">
-                  <a href="/register" class="font-medium text-indigo-600 hover:text-indigo-500">
+                  <router-link to="/register" class="font-medium text-indigo-600 hover:text-indigo-500">
                     Register
-                  </a>
+                  </router-link>
                 </div>
               </div>
 
@@ -64,6 +64,12 @@
                 <a :href="api_url + '/api/line/login'"  target="_black" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                   Sign in with Line
                 </a>
+              </div>
+              <div class="text-gray-700">
+                <p>default password 123456</p>
+                <p>princial email: susan@edu.com</p>
+                <p>teacher email: normal@teacher.com</p>
+                <p>student email: student@student.com</p>
               </div>
             </form>
           </div>
