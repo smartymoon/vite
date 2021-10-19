@@ -35,7 +35,7 @@ const store = createStore({
         fromName: ''
       },
       talkingWith: null,
-      unreadAdmin: 0
+      unreadAdmin: 0,
     }
   },
   getters: {
@@ -95,16 +95,16 @@ const store = createStore({
     },
     setUnreadAdmin(state, count) {
       state.unreadAdmin = count
-    }
+    },
   },
   actions: {
-      login({ commit }, form) {
-        http.post('login', form).then(({data}) => {
+      async login({ commit }, form) {
+        await http.post('login', form).then(({data}) => {
           dealAuth(commit, data)
         })
       },
-      normalTeacherLogin({ commit }, form) {
-        http.post('normal_teacher', form).then(({data}) => {
+      async normalTeacherLogin({ commit }, form) {
+        await http.post('normal_teacher', form).then(({data}) => {
           dealAuth(commit, data)
         })
       },
@@ -157,11 +157,10 @@ const store = createStore({
             commit('setUnreadAdmin', data)
           })
       },
-      register({commit}, form) {
-          http.post('/register', form)
-              .then(({data}) => {
-                dealAuth(commit, data)
-              })
+      async register({commit}, form) {
+          await http.post('/register', form).then(({data}) => {
+            dealAuth(commit, data)
+          })
       } 
   }
 })

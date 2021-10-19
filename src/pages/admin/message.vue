@@ -1,6 +1,6 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-  <div class="flex flex-col" v-if="data.lenght > 0">
+  <div class="flex flex-col" v-if="data.length > 0">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -52,6 +52,7 @@ export default {
     const store = useStore()
     const type = store.state.role === 'student' ? 'student' : 'teacher';
     http.get(`/${type}/admin-messages`).then( list => {
+      console.log(list)
       data.value = list
       store.commit('setUnreadAdmin', 0)
     })

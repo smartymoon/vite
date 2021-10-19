@@ -10,9 +10,7 @@
     <p class="py-2" v-if="invite_url">{{ invite_url }}</p>
 
     <div class="flex justify-end">
-      <button @click="handleSubmit" type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-          Sent Email
-      </button>
+      <lee-button text="Send Email" @click="handleSubmit" :loading="loading" />
     </div>
   </div>
 </template>
@@ -23,11 +21,13 @@ import { reactive, toRaw } from '@vue/reactivity'
 import { useStore } from 'vuex'
 import { ExclamationCircleIcon } from '@heroicons/vue/solid'
 import LeeInput from '../../../components/LeeInput.vue'
+import LeeButton from '../../../components/LeeButton.vue'
 import http from '../../../http'
 export default {
     components: {
       ExclamationCircleIcon,
-      LeeInput
+      LeeInput,
+      LeeButton
     },
     props: {
         school: {
@@ -37,18 +37,22 @@ export default {
     },
     setup(props) {
         const store = useStore()
+        const loading = ref(false)
         const invite_url = ref('')
         const form = reactive({
             school_id: props.school.id,
             teacher_email: '',
         })
         return {
+            loading,
             form,
             invite_url,
             handleSubmit () {
+                if(loading.value) return
+                loading.value = true
                 http.post('/invitations', toRaw(form)).then(({data}) => {
                    invite_url.value = data.url 
-                })
+                }).finally(() => loading.value = false)
             }
         }
     }

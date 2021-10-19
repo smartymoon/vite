@@ -55,9 +55,12 @@
               </div>
 
               <div>
+                <!--
                 <button @click="handleLogin" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                   Sign in
                 </button>
+                -->
+                <lee-button @click="handleLogin" text="Sign in" class="w-full" :loading="loading"/>
                 <div class="relative flex justify-center text-sm my-2">
                     <span class="px-2 bg-white text-gray-500"> Or </span>
                 </div>
@@ -85,10 +88,15 @@
 <script>
 import { reactive } from '@vue/reactivity'
 import { useStore } from 'vuex'
-import notify from '../notify.js'
+import LeeButton from '../components/LeeButton.vue'
+import {ref} from 'vue'
 
 export default {
+    components: {
+      LeeButton
+    },
     setup() {
+        const loading = ref(false)
         const api_url = import.meta.env.VITE_API_URL
         const store = useStore()
         console.log(store)
@@ -99,10 +107,15 @@ export default {
             password: '123456',
         })
         return {
+            loading,
             api_url,
             form,
             handleLogin() {
-                store.dispatch('login', form)
+                if (loading.value) return
+                loading.value = true
+                store.dispatch('login', form).then(() => {
+                  loading.value = false
+                })
             }
         }
     }

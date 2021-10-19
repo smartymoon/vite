@@ -21,7 +21,13 @@
     <div class="relative flex items-center mt-3">
       <input v-on:keyup.enter="handleSent" autofocus v-model="current_message" placeholder="write message here" type="text" name="search" id="search" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-12 sm:text-sm border-gray-300 rounded-md" />
       <div @click="handleSent" class="absolute inset-y-0 right-0 flex py-1.5 pr-1.5 cursor-pointer">
-        <kbd class="inline-flex items-center border border-gray-200 rounded px-2 text-sm font-sans font-medium text-gray-400 bg-gray-200">
+        <div v-if="loading" class="text-gray-900 flex items-center">
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+        </div>
+        <kbd v-else class="inline-flex items-center border border-gray-200 rounded px-2 text-sm font-sans font-medium text-gray-400 bg-gray-200">
            Send
         </kbd>
       </div>
@@ -60,10 +66,9 @@ export default {
         const store = useStore()
         const talks = ref([]);
         const current_message = ref('')
-        let last_message = {}
+        const loading = ref(false)
         watch(() => store.getters.newMessage, ({message}) => {
             if (!message) return
-            last_message = message
             if (message.from_id === +props.another.id) {
                 talks.value.push({
                     id: message.id,
@@ -100,8 +105,10 @@ export default {
             avatars,
             talks,
             current_message,
+            loading,
             handleSent() {
-                if (!current_message.value) return;
+                if (!current_message.value || loading.value) return;
+                loading.value = true
                 http.post('messages/' + props.me.role, {
                     toId: props.another.id,
                     message: current_message.value
@@ -113,7 +120,7 @@ export default {
                         mine: true,
                         created_at: data.created_at
                     })
-                })
+                }).finally(() => loading.value = false)
 
             }
         }

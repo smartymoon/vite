@@ -65,9 +65,7 @@
             </div>
           </div>
           <div class="sm:col-span-2">
-            <button @click="handleSubmit" class="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                Join Us
-            </button>
+            <lee-button text="Join Us" @click="handleSubmit" :loading="loading" class="w-full" />
           </div>
         </form>
       </div>
@@ -80,13 +78,18 @@ import { onMounted, reactive, ref, toRaw, computed } from 'vue'
 import http from '../../http'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
+import LeeButton from '../../components/LeeButton.vue'
 
 export default {
+  components: {
+    LeeButton
+  },
   setup() {
     const slug = useRoute().query.slug
     const school = ref('')
     const email = ref('')
     const store = useStore()
+    const loading = ref(false)
 
     const errors = computed(() => {
         return store.getters.getErrors || []
@@ -106,11 +109,14 @@ export default {
     })  
     return {
         school,
+        loading,
         email,
         form,
         errors,
         handleSubmit() {
-            store.dispatch('normalTeacherLogin', toRaw(form))
+            if(loading.value) return
+            loading.value = true
+            store.dispatch('normalTeacherLogin', toRaw(form)).finally(() => loading.value = false)
         }
     }
   },

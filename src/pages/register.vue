@@ -43,9 +43,7 @@
               </div>
 
               <div>
-                <button @click="handleSubmit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                  Register
-                </button>
+                <lee-button @click="handleSubmit" text="Register" class="w-full" :loading="loading" />
               </div>
               <p class="text-gray-700">default password 123456</p>
             </div>
@@ -60,15 +58,18 @@
 </template>
 
 <script>
-import { reactive, toRaw } from 'vue'
+import { reactive, toRaw, ref } from 'vue'
 import LeeInput from '../components/LeeInput.vue'
 import { useStore } from 'vuex'
+import LeeButton from '../components/LeeButton.vue'
 
 export default {
   components: {
-    LeeInput
+    LeeInput,
+    LeeButton
   },
   setup(props) {
+    const loading = ref(false)
     const store = useStore()
     const form = reactive({
               name: '',
@@ -78,20 +79,11 @@ export default {
     })
     return {
       form,
+      loading,
       handleSubmit() {
-          // into store
-          /*
-          http.post('/register', form)
-              .then(({accessToken}) => {
-                setToken(accessToken)
-                Inertia.get('/', {}, bearerHeader())
-              })
-              .catch(error => {
-                checkValidate(error, errors => validations.value = errors)
-              }
-          );
-          */
-          store.dispatch('register', toRaw(form))
+          if (loading.value) return 
+          loading.value = true
+          store.dispatch('register', toRaw(form)).finally(() => loading.value = false)
       }
     }
   }
