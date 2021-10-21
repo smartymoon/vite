@@ -3,7 +3,7 @@
   <h2 class="mb-4">Create School</h2>
   <lee-input label="School Name" placeholder="Input School Name" name="school_name" v-model="school_name" />
   <div class="flex justify-end">
-    <LeeButton text="Hello" @click="handleSubmit" :loading="loading" />
+    <LeeButton text="Apply" @click="handleSubmit" :loading="loading" />
   </div>
 </div>
 </template>
