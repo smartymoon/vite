@@ -61,6 +61,15 @@
                 </button>
               </div>
         </form>
+
+        <div class="flex flex-col items-center justify-center">
+          <img src="https://qr-official.line.me/sid/L/112bpgph.png" alt="">
+          <div class="text-gray-800">
+            <p class="px-10">scan QR code to add bot as your friend</p>
+            <p>then you can get message from administrator</p>
+          </div>
+        </div>
+
     </div>
   </div>
 </template>
