@@ -1,9 +1,9 @@
 <template>
-<div class="grid grid-cols-4 gap-4">
+<div class="md:grid grid-cols-4 gap-4">
     <div class="col-span-2">
         <people-list :people="people" @chat="handleChat" />
     </div>
-    <div class="col-span-2">
+    <div class="mt-3 md:mt-0 col-span-2">
         <Chat :talk-to="chat_name" :me="{id: $store.state.user.id, role:'teacher'}"  :another="{id: another_id, role:'student'}"/>
     </div>
 </div>
@@ -12,7 +12,6 @@
 <script>
 import PeopleList from '../../components/PeopleList.vue'
 import Chat from '../../components/Chat.vue'
-import http from '../../http'
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRouter } from 'vue-router' 
 import { useStore  } from 'vuex'

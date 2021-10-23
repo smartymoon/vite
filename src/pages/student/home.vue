@@ -1,9 +1,9 @@
 <template>
-<div class="grid grid-cols-4 gap-4">
+<div class="md:grid grid-cols-4 gap-4">
     <div class="col-span-2">
         <people-list :people="people" @chat="handleChat" />
     </div>
-    <div class="col-span-2">
+    <div class="col-span-2 mt-3 md:mt-0">
         <Chat :talk-to="chat_name" :me="{id: $store.state.user.id, role:'student'}"  :another="{id: another_id, role:'teacher'}"/>
     </div>
 </div>

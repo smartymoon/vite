@@ -1,5 +1,5 @@
 <template>
-<div class="border p-3 rounded flex flex-col h-full" v-if="talkTo" >
+<div class="border p-3 rounded flex flex-col h-full max-h-96 md:max-h-full" v-if="talkTo" >
     <h2 class="text-lg border-b pb-2">Chat with {{ talkTo }}</h2>
     <div class="overflow-y-scroll p-3 mt-3 flex flex-col-reverse h-full flex-auto" style="height: 600px; ">
         <div v-if="talks.length > 0">

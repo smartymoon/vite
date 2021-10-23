@@ -1,6 +1,6 @@
 <template>
-<div class="grid grid-cols-5 gap-4">
-    <div class="col-span-3">
+<div class="md:grid md:grid-cols-5 gap-4">
+    <div class="md:col-span-3 mb-4 md:mb-0">
         <school-list class="mb-4" v-if="schools.length > 0" :schools="schools" @change="handleSchoolChange" />
         <div v-else>
             You don't have a school, create one first
