@@ -102,9 +102,6 @@ const routes = [
   {
     path: "/line/login",
     component: () => import("../pages/lineLogin.vue"),
-    meta: {
-      middleware: 'guest'
-    }
   },
   {
     path: '/invitation',

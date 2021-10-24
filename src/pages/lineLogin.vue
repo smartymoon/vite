@@ -34,35 +34,9 @@
                 </li>
                 </ul>
             </div>
-            <h2 class="mt-20 mb-4">Or bind an existing account</h2>
         </template>
-        <h2 v-else class="mb-4">Bind an existing account</h2>
-        <form  @submit.prevent class="space-y-6">
-              <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">
-                  Email address
-                </label>
-                <div class="mt-1">
-                  <input v-model="form.email" id="email" name="email" type="email" autocomplete="email" required="" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-                </div>
-              </div>
-
-              <div class="space-y-1">
-                <label for="password" class="block text-sm font-medium text-gray-700">
-                  Password
-                </label>
-                <div class="mt-1">
-                  <input v-model="form.password" id="password" name="password" type="password" autocomplete="current-password" required="" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-                </div>
-              </div>
-              <div>
-                <button @click="handleBind" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                  Bind and Sign in
-                </button>
-              </div>
-        </form>
-
-        <div class="flex flex-col items-center justify-center">
+        <h2 v-else class="mb-4">Your should login first then bind line</h2>
+        <div class="mt-5 flex flex-col items-center justify-center">
           <img src="https://qr-official.line.me/sid/L/112bpgph.png" alt="">
           <div class="text-gray-800">
             <p class="px-10 text-center">scan QR code to add bot as your friend, 
@@ -119,11 +93,12 @@ const bindUsers = [
 */
 
 import { reactive, toRaw } from '@vue/reactivity'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import http from '../http'
 import { useStore } from 'vuex'
 import { onMounted } from '@vue/runtime-core'
 import { ref } from '@vue/reactivity'
+import router from '../router'
 
 const avatars = [
     'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
@@ -141,6 +116,7 @@ export default {
   setup() {
 
     const route = useRoute()
+    const router = useRouter()
     const store = useStore()
     const official_id = route.query.official_id
 
@@ -152,8 +128,22 @@ export default {
 
     const bindUsers = ref([])
     onMounted(() => {
+        // try bind login
+        if (store.state.user) {
+          const type  = store.getters.role === 'student' ? 'student' : 'teacher'
+          http.post('/' + type + '/' + 'line/bind', {
+            official_id
+          }).finally(() => {
+            router.push('/' + store.getters.role + '/home')
+          })
+          return
+        }
         http.get('/line/' + official_id + '/users').then(users => {
-            console.log(bindUsers)
+            if(users.length === 0) {
+              setTimeout(() => {
+                router.push('/login')
+              }, 1500)
+            }
             bindUsers.value = users
         })
     })
