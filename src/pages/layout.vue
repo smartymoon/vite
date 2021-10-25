@@ -13,7 +13,7 @@
               <router-link v-for="item in navigation" :key="item.name" :to="item.href" :class="[item.href === $route.path ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">
                 {{ item.name }}
               </router-link>
-              <a href="http://edu.test/api/line/login" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">bind-line</a>
+              <a :href="api_url + '/api/line/login'" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">bind-line</a>
             </div>
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:items-center ">
@@ -66,7 +66,7 @@
           <router-link v-for="item in navigation" :key="item.name" :to="item.href" :class="[item.current ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800', 'block pl-3 pr-4 py-2 border-l-4 text-base font-medium']" :aria-current="item.current ? 'page' : undefined">
             {{ item.name }}
           </router-link>
-          <a href="http://edu.test/api/line/login" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+          <a :href="api_url + '/api/line/login'" class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
               bind-line
           </a>
           <a class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium" @click="handleLogout">
@@ -186,6 +186,7 @@ export default {
 
 
     return {
+      api_url: import.meta.env.VITE_API_URL,
       user,
       role,
       unreadAdmin: computed(() => store.state.unreadAdmin),
